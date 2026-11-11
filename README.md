@@ -43,19 +43,22 @@ Built in milestones; each is reviewed before it is committed.
 | :-- | :-- | :-- |
 | M1 | Docs: README and analysis plan | done |
 | M2 | Scaffolding and dummy data | done |
-| M3 | Load, validate, clean, derive | in review |
-| M4 | Descriptives and visualization | not started |
+| M3 | Load, validate, clean, derive | done |
+| M4 | Descriptives and visualization | in review |
 | M5 | Inferential models | not started |
 | M6 | Conclusions and end-to-end run | not started |
 | M7 | (optional) Phase 1 survey analysis | not started |
 
-## Try it now (M3)
+## Try it now (M3 + M4)
 ```bash
-.venv\Scripts\python -m pytest -q                                       # 17 tests
+.venv\Scripts\python -m pytest -q                                       # 23 tests
 .venv\Scripts\python -m pipeline.prepare --data-dir data/dummy --out outputs
+.venv\Scripts\python scripts/build_notebooks.py                         # (re)builds notebooks/
+.venv\Scripts\jupyter lab notebooks/03_descriptives_and_figures.ipynb   # Run All
 ```
-writes `validation_report.csv`, `cleaning_log.csv`, `trials.csv` and `episodes.csv` to `outputs/tables/`.
-Pointing it at `data/dummy_dirty` stops with the list of hard failures.
+`pipeline.prepare` writes `validation_report.csv`, `cleaning_log.csv`, `trials.csv` and `episodes.csv` to `outputs/tables/`.
+Pointing it at `data/dummy_dirty` stops with the list of hard failures. Notebook 03 writes the descriptive tables
+(`desc_*.csv`), ten figures (PNG + SVG in `outputs/figures/`) and the data behind each figure (`fig_data_*.csv`).
 
 ## Quickstart (after M6)
 ```bash

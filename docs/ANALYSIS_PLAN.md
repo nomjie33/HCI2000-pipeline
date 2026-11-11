@@ -131,8 +131,13 @@ Each plot uses the same colour per pattern throughout, has labelled axes with un
 | F5 | Success rate and failure type per pattern | success outcome |
 | F6 | SEQ distribution per pattern (diverging stacked bars) | secondary |
 | F7 | Preference ranking: stacked bars of rank 1/2/3 | secondary |
-| F8 | T_find by block position and by task pair | order and task-difficulty check |
-| F9 | Model diagnostics: residual QQ plot and residuals vs fitted for log T_find / log R | assumptions |
+| F8 | T_find by block position (= task pair, see gap 8 in §3) per pattern | order / task-difficulty check |
+| F9 | Wrong selections per trial at each tree level (L1/L2/L3), by pattern | path analysis: where errors happen |
+| F10 | Most frequently chosen wrong items (all patterns pooled) | path analysis: misleading labels |
+| F11 | Model diagnostics: residual QQ plot and residuals vs fitted for log T_find / log R | assumptions (built in M5) |
+
+Path analyses use the selection path in the event log: `path_efficiency` (selections vs the minimum, Back actions),
+`errors_by_level`, `top_wrong_nodes` and `confusion_by_target` (which wrong item was chosen for which target) are saved as `desc_*.csv`.
 
 Figures are saved as PNG and SVG in `outputs/figures/`.
 
@@ -140,7 +145,7 @@ Figures are saved as PNG and SVG in `outputs/figures/`.
 
 | Outcome | Model (this pipeline) | Notes |
 | :-- | :-- | :-- |
-| log T_find (H1), successful trials | Linear mixed model: `log T_find ~ pattern + block_position + task_pair`, random intercept for participant | `statsmodels.MixedLM` |
+| log T_find (H1), successful trials | Linear mixed model: `log T_find ~ pattern + block_position`, random intercept for participant (block position and task pair are aliased, gap 8) | `statsmodels.MixedLM` |
 | E (H2), successful trials | Poisson GEE, exchangeable correlation, clustered on participant; switch to negative binomial GEE if Pearson dispersion > 1.5 | deviation, see §3 |
 | log R (H3), trials with E ≥ 1 | Same LMM as T_find | participants without errors under a pattern contribute nothing |
 | Success (all trials) | Logistic GEE, same terms | |
@@ -183,7 +188,11 @@ The conclusion step produces `outputs/tables/hypothesis_decisions.csv` and `outp
 4. **Censoring.** Analysing only successful trials can bias times downward for the harder patterns. The proposal reports failure counts; we add the censored sensitivity analysis above.
 5. **Rule from analysis to conclusion** was missing; Step 7 supplies it.
 6. **Phase 1 survey (RQ1/RQ2)** analysis is only described as frequencies. A pattern-frequency and inter-coder-agreement (Cohen's κ) notebook is an optional add-on.
-7. **Power analysis** depends on the pilot; the pipeline's variance estimates can be reused once pilot data exists (not built yet).
+8. **Block position and task pair are the same factor.** In Table 3 every sequence runs pair A in block 1, B in block 2, C in block 3,
+   so the two covariates in §4.6/Table 4 are perfectly collinear: a learning effect and a task-difficulty difference cannot be separated.
+   The pipeline fits one term (`block_position`, read as "block / task pair") and reports it as a limitation. Fixing it needs
+   the design to vary which pair goes in which block (e.g. a 6-sequence design or randomised pair order), which is a decision for the group.
+9. **Power analysis** depends on the pilot; the pipeline's variance estimates can be reused once pilot data exists (not built yet).
 
 ## 4. Reproducibility
 - All thresholds (180 s limit, α = .05, dispersion cutoff) live in `pipeline/config.py`.

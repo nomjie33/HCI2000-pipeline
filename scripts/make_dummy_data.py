@@ -194,7 +194,8 @@ class Trial:
             good, correct = self.path[lvl - 1], self.path[lvl]
             while True:
                 if rng.random() < self.p_err(lvl):
-                    wrong = [s for s in T.children[good] if s != correct]
+                    wrong = [s for s in T.children[good]
+                             if s != correct and s.startswith("PR") == correct.startswith("PR")]   # same tree only
                     pick = wrong[rng.integers(len(wrong))]
                     self.act("select", pick, pick, self.scan(lvl))
                     self._recover_list(lvl, pick, good, correct)
