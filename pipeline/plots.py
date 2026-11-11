@@ -347,6 +347,94 @@ FIGURES = {
 }
 
 
+def f11_diagnostics(suite):
+    """Residual checks for the two linear mixed models on log time (H1 and H3)."""
+    fig, axes = plt.subplots(2, 2, figsize=(8.4, 6.9), gridspec_kw=dict(hspace=0.55, wspace=0.28))
+    rows = []
+    for r, (key, nm) in enumerate((("T_find", "log T_find (H1)"), ("R", "log R (H3)"))):
+        a = suite.analyses[key].primary
+        aq, ar = axes[r]
+        if a.resid is None:
+            for ax in (aq, ar):
+                ax.text(0.5, 0.5, "model not fitted", ha="center", va="center", color=INK2, transform=ax.transAxes)
+                ax.set_axis_off()
+            continue
+        res = a.resid.dropna()
+        (osm, osr), _ = stats.probplot(res, dist="norm")
+        aq.scatter(osm, osr, s=16, color=INK2, linewidth=0)
+        aq.plot(osm, res.mean() + res.std() * osm, color=AXIS, linewidth=1, zorder=1)
+        aq.set_xlabel("Theoretical normal quantile"); aq.set_ylabel("Residual")
+        sh = stats.shapiro(res).pvalue if len(res) >= 3 else np.nan
+        aq.set_title(f"{nm}: normal Q-Q (Shapiro p = {sh:.3f})", loc="left", fontsize=9.5, fontweight="bold")
+        for p in ORDER:
+            m = (a.patterns_resid == p).reindex(res.index).fillna(False)
+            ar.scatter(a.fitted[res.index][m], res[m], s=22, color=COLORS[p], edgecolor=SURFACE, linewidth=1,
+                       label=NAMES[p], zorder=3)
+        ar.axhline(0, color=AXIS, linewidth=1, zorder=1)
+        ar.set_xlabel("Fitted value"); ar.set_ylabel("Residual")
+        ar.set_title(f"{nm}: residuals vs fitted", loc="left", fontsize=9.5, fontweight="bold")
+        for ax in (aq, ar):
+            _grid(ax, "both")
+        rows.append(pd.DataFrame(dict(outcome=key, fitted=a.fitted[res.index], resid=res, pattern=a.patterns_resid[res.index])))
+    fig.legend(handles=[Patch(facecolor=COLORS[p], label=NAMES[p]) for p in ORDER], loc="lower center", ncol=3,
+               fontsize=8.5, bbox_to_anchor=(0.5, -0.02))
+    fig.suptitle("Model diagnostics (primary linear mixed models)", x=0.01, ha="left", fontsize=11, fontweight="bold")
+    return fig, (pd.concat(rows) if rows else pd.DataFrame())
+
+
+def f12_effects(suite):
+    """Pairwise effect sizes (primary models) with 95% CI; filled = significant after Holm correction."""
+    keys = [k for k in ("T_find", "E", "R") if suite.analyses[k].primary.ok]
+    fig, ax = plt.subplots(figsize=(7.6, 1.2 + 1.35 * len(keys)))
+    ypos, ylabels, rows, y = [], [], [], 0
+    for key in keys:
+        a = suite.analyses[key]
+        pw = a.primary.pairwise
+        unit = {"T_find": "ratio of geometric means", "E": "rate ratio", "R": "ratio of geometric means"}[key]
+        ax.text(0.0, y, f"{a.spec.hypothesis}  {a.spec.label}  ({unit})" + ("  [decision uses Friedman]" if a.chosen == "fallback" else ""),
+                transform=ax.get_yaxis_transform(), ha="left", va="center", fontsize=9, fontweight="bold", color=INK)
+        y += 1
+        for r in pw.itertuples():
+            ax.plot([r.ci_low, r.ci_high], [y, y], color=INK2, linewidth=1.4, zorder=2)
+            ax.scatter([r.effect], [y], s=52, facecolor=INK if r.significant_holm else SURFACE, edgecolor=INK,
+                       linewidth=1.4, zorder=3)
+            ax.text(1.02, y, f"{r.effect:.2f} [{r.ci_low:.2f}, {r.ci_high:.2f}]   p(Holm) = {r.p_holm:.3f}",
+                    transform=ax.get_yaxis_transform(), va="center", fontsize=8, color=INK2)
+            ypos.append(y); ylabels.append(r.contrast)
+            rows.append(dict(outcome=key, contrast=r.contrast, effect=r.effect, ci_low=r.ci_low, ci_high=r.ci_high,
+                             p_holm=r.p_holm, significant_holm=r.significant_holm))
+            y += 1
+        y += 0.6
+    ax.axvline(1, color=AXIS, linewidth=1, zorder=1)
+    ax.set_xscale("log"); ax.set_xticks([0.25, 0.5, 1, 2, 4]); ax.get_xaxis().set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
+    ax.xaxis.set_minor_formatter(NullFormatter())
+    ax.set_yticks(ypos); ax.set_yticklabels(ylabels, fontsize=8.5)
+    ax.set_ylim(y - 0.6, -0.9)             # inverted axis with headroom for the first group heading
+    ax.set_xlabel("Effect size (1 = no difference); first pattern relative to second")
+    _grid(ax, "x")
+    ax.set_title("Pairwise pattern effects", loc="left", fontsize=11, fontweight="bold", pad=14)
+    ax.text(0, 1.015, "Primary models, 95% CI. Filled dot: significant after Holm correction (3 contrasts per outcome).",
+            transform=ax.transAxes, fontsize=8.5, color=INK2, va="bottom")
+    fig.subplots_adjust(right=0.62)
+    return fig, pd.DataFrame(rows)
+
+
+def make_model_figures(suite, out_dir) -> dict[str, Path]:
+    out = Path(out_dir)
+    (out / "figures").mkdir(parents=True, exist_ok=True)
+    (out / "tables").mkdir(parents=True, exist_ok=True)
+    paths = {}
+    with plt.rc_context(RC):
+        for name, fn in (("F11_model_diagnostics", f11_diagnostics), ("F12_pairwise_effects", f12_effects)):
+            fig, data = fn(suite)
+            fig.savefig(out / "figures" / f"{name}.png", dpi=200, bbox_inches="tight")
+            fig.savefig(out / "figures" / f"{name}.svg", bbox_inches="tight")
+            plt.close(fig)
+            data.to_csv(out / "tables" / f"fig_data_{name}.csv", index=False)
+            paths[name] = out / "figures" / f"{name}.png"
+    return paths
+
+
 def make_all_figures(prep, out_dir) -> dict[str, Path]:
     """`prep` is a pipeline.prepare.Prepared. Writes PNG + SVG to <out_dir>/figures and each figure's data to
     <out_dir>/tables/fig_data_<name>.csv. Returns {name: png path}."""

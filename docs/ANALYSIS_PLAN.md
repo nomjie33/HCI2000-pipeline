@@ -151,17 +151,26 @@ Figures are saved as PNG and SVG in `outputs/figures/`.
 | Success (all trials) | Logistic GEE, same terms | |
 | log T_clean, SEQ (secondary) | LMM; SEQ also Friedman test across patterns | |
 
-Omnibus pattern effect by Wald test. If significant, the three pairwise contrasts (DH–MM, DH–ND, MM–ND) are tested with Holm
-correction. Effect sizes with 95% CI: ratio of geometric means (times), rate ratio (counts), odds ratio (success).
+Omnibus pattern effect by Wald chi-square (2 df). Pairwise contrasts (MM vs DH, ND vs DH, ND vs MM; DH is the reference) use
+Holm correction and are *reported* only when the omnibus test is significant. Effect sizes with 95% CI: ratio of geometric means
+(times), rate ratio (counts), odds ratio (success), difference in means (SEQ).
+Implementation details: mixed models are fitted by REML, trying optimizers in turn until one converges (a fit with participant
+variance ≈ 0 is flagged as singular); GEE uses an exchangeable working correlation with robust standard errors; the negative-binomial
+dispersion is estimated by the method of moments from the Poisson fit.
 
-**Fallback** (when the LMM fails to converge, or residuals clearly violate normality/variance assumptions on log scale):
-Friedman test on each participant's per-pattern values, with Wilcoxon signed-rank follow-ups (Holm). Per-participant values for R
-require a participant to have E ≥ 1 under every pattern; otherwise Friedman is not run for R and this is stated.
+**Fallback rule (fixed in advance, `pipeline/config.py`).** The decision uses the Friedman test on participant-level values
+(geometric mean for times, mean for counts/ratings, proportion for success) with Wilcoxon signed-rank follow-ups (Holm) when the primary model:
+(a) is not estimable or does not converge (e.g. complete separation in the logistic model when a pattern has 100% success), or
+(b) has residuals that fail a Shapiro normality test or a Levene equal-spread test across patterns at p < .01.
+If the fallback itself cannot run (R needs a participant to have E ≥ 1 under every pattern; with few such participants it is unavailable),
+the primary result is kept and the flag is reported. The Friedman test is always computed, so both results appear in the tables.
 
 **Sensitivity analyses** (reported, not used for the primary decision):
-1. All trials, with failures treated as right-censored at 180 s (Cox model on time-to-target, participant-clustered).
-2. Excluding block position 1 (practice/warm-up effect).
-3. Adding `gov_familiarity` and `used_reference_site` as covariates.
+1. All trials, with failures treated as right-censored at the trial end (180 s for time-outs): Cox model on time-to-target with
+   participant-clustered robust errors. Hazard ratio > 1 means the target is reached sooner.
+2. Excluding block position 1 (practice/warm-up effect), for H1–H3.
+3. Adding `gov_familiarity` and `used_reference_site` as covariates, for H1–H3.
+Each row reports whether its omnibus significance agrees with the primary model; disagreement is stated as a limitation.
 
 ### Step 7. Draw conclusions
 Rules are fixed in advance so conclusions do not depend on how the results look:

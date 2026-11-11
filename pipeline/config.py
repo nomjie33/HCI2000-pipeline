@@ -28,6 +28,12 @@ EXPERIMENTAL_TRIALS = 6
 
 SEQ_RANGE = (1, 7)
 
+# --- inferential models (proposal 4.7; rules fixed in advance, see docs/ANALYSIS_PLAN.md step 6) ---
+REF_PATTERN = "DH"                                   # reference level for pattern effects
+CONTRASTS = (("MM", "DH"), ("ND", "DH"), ("ND", "MM"))   # pairwise contrasts, Holm-corrected
+DISPERSION_MAX = 1.5            # Poisson Pearson dispersion above this -> negative-binomial GEE
+RESID_P = 0.01                  # Shapiro (normality) / Levene (equal spread) p below this -> use Friedman fallback
+
 REQUIRED_COLUMNS = {
     "events": [
         "participant_id", "trial_id", "sequence", "block_position", "trial_order", "pattern", "task_id",
