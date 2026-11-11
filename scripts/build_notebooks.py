@@ -131,11 +131,113 @@ paths = make_model_figures(suite, OUT_DIR)'''),
     return nb(cells)
 
 
+def notebook_01():
+    cells = [
+        ("md", "# 01. Load, validate and clean\n\nFirst step for every new export. It reads the CSVs, runs every validation check, "
+               "and shows exactly what the cleaning step removes. **Dummy data by default.**\n\n"
+               "Checks are *hard* (the analysis refuses to run: the derived numbers would be untrustworthy) or *soft* (reported and handled explicitly). "
+               "Try `DATA_DIR = ROOT / 'data' / 'dummy_dirty'` below to see the validator catch 8 injected faults."),
+        ("code", SETUP + '''
+from pipeline.io import load_dataset
+from pipeline.validate import validate
+from pipeline.clean import clean
+
+ds = load_dataset(DATA_DIR)
+print({"events": len(ds.events), "trials": ds.events.trial_id.nunique(),
+       "participants": ds.participants.participant_id.nunique(), "excluded in exclusions.csv": len(ds.exclusions)})
+ds.events.head(10)'''),
+        ("md", "## Validation report"),
+        ("code", "report = validate(ds)\nr = report.to_frame()\nr"),
+        ("code", "print('HARD failures:', [x.name for x in report.hard_failures])\nprint('soft failures:', [x.name for x in report.soft_failures])"),
+        ("md", "### Offending rows\nEmpty when everything passes. Fix hard failures in the raw export (and note the fix in the cleaning log) before continuing."),
+        ("code", "report.details_frame()"),
+        ("md", "## Cleaning\nOnly three things are ever removed, each logged: exact duplicate event rows, practice trials, and trials listed in "
+               "`exclusions.csv` (device/app faults, decided without looking at the pattern). **No statistical outlier removal.**"),
+        ("code", "report.raise_if_hard()        # stops here if the data has hard problems\n"
+                 "clean_ds, log = clean(ds)\n"
+                 "print(f'{ds.events.trial_id.nunique()} trials before, {clean_ds.events.trial_id.nunique()} after')\nlog"),
+        ("code", "log.groupby('step').agg(trials=('trial_id', 'nunique'), event_rows=('n_event_rows', 'sum'))"),
+    ]
+    return nb(cells)
+
+
+def notebook_02():
+    cells = [
+        ("md", "# 02. Derive trial metrics\n\nTurns the event log into one row per trial using the proposal's definitions (3.2-3.3). "
+               "**Dummy data by default.**\n\n"
+               "- A *selection* is a tap on a menu item; it is an **error** if the item is not on the correct path P*.\n"
+               "- An *error episode* starts at an error and ends when the current node is back on P* (an on-path tap, or a Back/collapse landing on-path); "
+               "if the trial ends first, it ends at the trial end.\n"
+               "- **R** = sum of episode durations (Eq. 1); **T_find** = time of the terminal event; **T_clean = T_find - R** (Eq. 2).\n"
+               "- Give-up and time-out trials keep T_find = trial end but `success = 0`."),
+        ("code", SETUP + '''
+from pipeline.prepare import prepare
+
+prep = prepare(DATA_DIR)
+trials, episodes = prep.trials, prep.episodes
+trials.head()'''),
+        ("md", "## Sanity checks\nEq. 2 must hold exactly, and the logged `on_path` flag should agree with the tree."),
+        ("code", "import numpy as np\n"
+                 "print('T_find = T_clean + R for every trial:', bool(np.allclose(trials.T_find, trials.T_clean + trials.R)))\n"
+                 "print('trials:', len(trials), '| with errors:', int((trials.E > 0).sum()), '| failed:', int((trials.success == 0).sum()))\n"
+                 "print('validation: logged on_path mismatches =', 0 if 'on_path_matches_tree' not in prep.report.failed_names else 'see notebook 01')"),
+        ("md", "## Look at one trial\nChange `TRIAL_ID`. The table shows each tap and whether it was on the correct path; the episodes below it are what R is built from."),
+        ("code", "TRIAL_ID = trials[trials.E > 0].trial_id.iloc[0]\n"
+                 "tree = prep.clean.tree\n"
+                 "ev = prep.clean.events[prep.clean.events.trial_id == TRIAL_ID][['t_ms', 'event_type', 'node_id', 'current_node_after']].copy()\n"
+                 "target = trials.loc[trials.trial_id == TRIAL_ID, 'target_node'].iloc[0]\n"
+                 "ev['on_path_now'] = ev.current_node_after.isin(tree.path(target))\n"
+                 "print('correct path:', ' > '.join(tree.path(target)))\n"
+                 "ev"),
+        ("code", "print(trials.loc[trials.trial_id == TRIAL_ID, ['trial_id', 'pattern', 'E', 'R', 'T_find', 'T_clean', 'selection_path']].to_string(index=False))\n"
+                 "episodes[episodes.trial_id == TRIAL_ID]"),
+        ("md", "## Check against the generator's ground truth (dummy data only)\nThe dummy generator records the true E, R and T_find for each trial; the pipeline must reproduce them exactly."),
+        ("code", "gt_path = DATA_DIR / '_ground_truth_trials.csv'\n"
+                 "if gt_path.exists():\n"
+                 "    gt = pd.read_csv(gt_path)\n"
+                 "    m = trials.merge(gt, on='trial_id', suffixes=('', '_true'))\n"
+                 "    print('trials compared:', len(m))\n"
+                 "    print('E equal:', bool((m.E == m.E_true).all()), '| R equal:', bool(np.allclose(m.R, m.R_true)), '| T_find equal:', bool(np.allclose(m.T_find, m.T_find_true)))\n"
+                 "else:\n"
+                 "    print('No ground-truth file (expected for real data).')"),
+    ]
+    return nb(cells)
+
+
+def notebook_05():
+    cells = [
+        ("md", "# 05. Conclusions and draft Results text\n\nRuns the whole pipeline in one call and applies the pre-set decision rules "
+               "(`pipeline/conclude.py`, plan step 7). **Dummy data by default: none of this may be cited until `DATA_DIR` points at real data.**\n\n"
+               "Rules: H1 to H3 are the *null* hypotheses (proposal 4.1). A null is rejected only when the omnibus test of the decision source "
+               "(the primary model, or the Friedman fallback when the primary is flagged) has p < .05; otherwise we *fail to reject* (never 'no difference'). "
+               "Pairwise contrasts are reported only after a significant omnibus test and only if they survive Holm correction."),
+        ("code", SETUP + '''
+from IPython.display import Markdown, display
+from pipeline.run import run_all
+from pipeline.conclude import mechanism
+
+res = run_all(DATA_DIR, OUT_DIR)
+print(f"{len(res.prep.trials)} trials, {res.prep.trials.participant_id.nunique()} participants -> {OUT_DIR}")'''),
+        ("md", "## Hypothesis decisions"),
+        ("code", "res.decisions[['hypothesis','outcome','test','statistic','df','p','decision','significant_contrasts','caution']].round(4)"),
+        ("md", "## Where does the time go? (RQ3)\nThe gap in mean T_find between two patterns splits exactly into a recovery part and a clean-navigation part."),
+        ("code", "tab, verdict = mechanism(res.prep, res.suite)\nprint(verdict)\ntab.round(2)"),
+        ("md", "## Limitations checklist\n`check` items need discussion in the paper; `note` items are standing design caveats."),
+        ("code", "res.limitations"),
+        ("md", "## Draft Results and Discussion text\nAlso saved to `outputs/results_draft.md`. It is a starting point: verify every number against the tables and write the interpretation yourselves."),
+        ("code", "display(Markdown(res.draft_path.read_text(encoding='utf-8')))"),
+    ]
+    return nb(cells)
+
+
 def main():
     OUT.mkdir(exist_ok=True)
-    nbf.write(notebook_03(), OUT / "03_descriptives_and_figures.ipynb")
-    nbf.write(notebook_04(), OUT / "04_inferential_models.ipynb")
-    print("wrote notebooks 03 and 04 to", OUT)
+    books = {"01_load_validate_clean": notebook_01(), "02_derive_trial_metrics": notebook_02(),
+             "03_descriptives_and_figures": notebook_03(), "04_inferential_models": notebook_04(),
+             "05_conclusions": notebook_05()}
+    for name, book in books.items():
+        nbf.write(book, OUT / f"{name}.ipynb")
+    print("wrote", ", ".join(books), "to", OUT)
 
 
 if __name__ == "__main__":

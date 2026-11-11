@@ -175,18 +175,24 @@ Each row reports whether its omnibus significance agrees with the primary model;
 ### Step 7. Draw conclusions
 Rules are fixed in advance so conclusions do not depend on how the results look:
 
-1. **Per hypothesis (H1–H3):** reject H0 if the omnibus pattern test has p < .05 *and* the primary model is not flagged by the fallback rule.
-   Otherwise "fail to reject" (never "no difference"; with N = 15 we may lack power).
-2. **Direction and size:** name the pairwise contrasts that survive Holm correction, with effect size and 95% CI. If only the omnibus is significant, say so.
-3. **Mechanism (RQ3):** compare F4 and the T_clean model: if R differences account for most of the T_find gap, attribute it to recovery;
-   if T_clean also differs, attribute it to slower correct navigation.
-4. **Robustness:** state whether the sensitivity analyses agree with the primary decision. Disagreement is reported as a limitation.
+1. **Per hypothesis (H1–H3, which are the *null* hypotheses, §4.1):** reject the null if the omnibus test of the *decision source* has p < .05.
+   The decision source is the primary model, or the Friedman fallback when the primary model is flagged (step 6). Otherwise "fail to reject"
+   (never "no difference"; with N = 15 we may lack power). If a flag has no usable fallback, the primary result is kept with a caution.
+2. **Direction and size:** pairwise contrasts are reported only after a significant omnibus test, and only those that survive Holm correction,
+   with effect size and 95% CI (no CI for the Friedman fallback).
+3. **Mechanism (RQ3):** because T_find = T_clean + R, the gap in mean T_find between two patterns splits exactly into a recovery part and a
+   clean-navigation part. Over the contrasts that differ, the gap is "mainly recovery" if the T_clean model is not significant and recovery is at least
+   half of the absolute gap; "mainly clean navigation" if the T_clean model is significant and recovery is under half; otherwise "both".
+4. **Robustness:** state how many sensitivity analyses agree with the primary significance. Disagreement is reported as a limitation.
 5. **Secondary outcomes:** success, SEQ, preference reported as supporting, not confirmatory.
-6. **Limitations auto-checklist:** N, number of failed trials per pattern (censoring), single reference site, mega-menu needing 2 vs 3 selections
-   (a feature of the pattern, §4.3), one device model, convenience sample of friends and family.
+6. **Limitations checklist (generated):** sample size vs plan, failed trials per pattern (censoring), fallbacks used, unresolved assumption flags,
+   number of trials behind H3, sensitivity disagreements, no correction across H1–H3, GEE population-averaged effects, block/task-pair aliasing,
+   mega-menu needing 2 vs 3 selections (§4.3), one reference site/device model, convenience sample of friends and family.
 
-The conclusion step produces `outputs/tables/hypothesis_decisions.csv` and `outputs/results_draft.md`
-(templated sentences plus tables and figure references) as starting text for the Results and Discussion sections. The group edits and owns the interpretation.
+One command produces all of it (`python scripts/run_pipeline.py --data-dir <folder> --out outputs`), including
+`outputs/tables/hypothesis_decisions.csv`, `limitations_checklist.csv`, `mechanism_decomposition.csv` and `outputs/results_draft.md`
+(templated sentences plus tables and figure references) as starting text for the Results and Discussion sections.
+Dummy-data runs carry a "SYNTHETIC DATA" banner. The group edits and owns the interpretation.
 
 ## 3. Gaps and deviations from the proposal (decisions needed)
 
