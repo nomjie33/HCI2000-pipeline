@@ -42,12 +42,20 @@ Built in milestones; each is reviewed before it is committed.
 | # | Milestone | Status |
 | :-- | :-- | :-- |
 | M1 | Docs: README and analysis plan | done |
-| M2 | Scaffolding and dummy data | in review |
-| M3 | Load, validate, clean, derive | not started |
+| M2 | Scaffolding and dummy data | done |
+| M3 | Load, validate, clean, derive | in review |
 | M4 | Descriptives and visualization | not started |
 | M5 | Inferential models | not started |
 | M6 | Conclusions and end-to-end run | not started |
 | M7 | (optional) Phase 1 survey analysis | not started |
+
+## Try it now (M3)
+```bash
+.venv\Scripts\python -m pytest -q                                       # 17 tests
+.venv\Scripts\python -m pipeline.prepare --data-dir data/dummy --out outputs
+```
+writes `validation_report.csv`, `cleaning_log.csv`, `trials.csv` and `episodes.csv` to `outputs/tables/`.
+Pointing it at `data/dummy_dirty` stops with the list of hard failures.
 
 ## Quickstart (after M6)
 ```bash

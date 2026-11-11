@@ -67,8 +67,10 @@ A `target_reached` row is logged at the same `t_ms` as the `select` of the targe
 ### 1.2 Derived trial table (App. B fields)
 
 `participant_id, trial_id, sequence, block_position, pattern, task_id, task_pair, target_node, min_selections,
-t_end_s, end_reason, success, E, R, T_find, T_clean, difficulty_rating`.
-An `episodes` table (one row per error episode: `trial_id, s_j, e_j, duration`) is kept for auditing R.
+t_end_s, end_reason, success, E, R, T_find, T_clean, difficulty_rating`, plus `trial_order`, covariates
+(`age, gender, gov_familiarity, used_reference_site`) and path descriptors: `n_selections`, `n_back_actions`
+(Back/collapse/logo) and `selection_path` (the ordered nodes the participant selected).
+An `episodes` table (one row per error episode: `trial_id, episode, start_s, end_s, duration_s, open_at_end`) is kept for auditing R.
 
 ## 2. Step-by-step plan
 
@@ -90,10 +92,11 @@ stops on hard failures, warns on soft ones):
 | Every experimental trial has a rating; every participant has a complete preference ranking (permutation of 1–3) | soft |
 
 ### Step 2. Clean
-1. Drop practice trials (`PR*`).
-2. Drop trials listed in `exclusions.csv`. Nothing is removed by a statistical rule (§4.7: no outlier removal).
-3. Write every drop and its reason to `outputs/tables/cleaning_log.csv`.
-4. Never drop or edit rows silently; any manual fix to the raw CSV must be noted in the cleaning log.
+1. Drop exact duplicate event rows (same trial, time, event, node), a logging artefact that would otherwise double-count errors.
+2. Drop practice trials (`PR*`).
+3. Drop trials listed in `exclusions.csv`. Nothing is removed by a statistical rule (§4.7: no outlier removal).
+4. Write every drop and its reason to `outputs/tables/cleaning_log.csv`.
+5. Never drop or edit rows silently; any manual fix to the raw CSV must be noted in the cleaning log.
 
 ### Step 3. Derive (§3.2–3.3)
 For each trial, with P\* = root→target path from the tree:
