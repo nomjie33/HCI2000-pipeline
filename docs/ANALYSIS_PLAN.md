@@ -36,6 +36,7 @@ Screen recordings are only a backup used to spot-check the log and to justify ex
 | trial_id | unique per trial, e.g. `P01_T3` (practice trials: `P01_PR1`) |
 | sequence | S1, S2, S3 (Table 3) |
 | block_position | 1–3 (0 for practice) |
+| trial_order | 1–6 order of the trial within the session (0 for practice); needed because the two tasks in a block alternate between participants |
 | pattern | DH, MM, ND |
 | task_id, task_pair | T1–T6 / `PR*`; pair A–C |
 | target_node | leaf node the participant must reach |
@@ -58,6 +59,10 @@ actions: logged, not selections. Every trial has one `start` and exactly one ter
 
 **`reference/tree.csv`**: `node_id, parent_id, level (1–3), label`. **`reference/tasks.csv`**: `task_id, task_pair, target_node`.
 The tree lets the pipeline recompute `on_path` independently instead of trusting the logged flag.
+
+Each dataset lives in one folder (`data/dummy/`, `data/raw/`, …) holding the four CSVs above plus a `reference/` subfolder
+with `tree.csv` and `tasks.csv`. The practice tree (`PR*` nodes, a public-library topic) is included in `tree.csv`.
+A `target_reached` row is logged at the same `t_ms` as the `select` of the target.
 
 ### 1.2 Derived trial table (App. B fields)
 

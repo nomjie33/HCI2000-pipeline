@@ -30,13 +30,19 @@ in the proposal: **[docs/ANALYSIS_PLAN.md](docs/ANALYSIS_PLAN.md)**.
 | `exclusions.csv` | trials removed for device/app faults |
 | `reference/tree.csv`, `reference/tasks.csv` | content tree and task targets |
 
+## Dummy data
+`python scripts/make_dummy_data.py` writes clean synthetic data to `data/dummy/` (15 participants, 105 trials incl.
+practice, a few give-ups/timeouts, one excluded trial). `--dirty` writes `data/dummy_dirty/` with 8 known faults listed in
+`_injected_faults.csv`, used to test the validator. `_ground_truth_trials.csv` holds the generator's true E, R, T_find
+for checking the pipeline. The dummy tree uses placeholder labels; replace `reference/tree.csv` once Phase 2 fixes the real tree.
+
 ## Planned layout and status
 Built in milestones; each is reviewed before it is committed.
 
 | # | Milestone | Status |
 | :-- | :-- | :-- |
-| M1 | Docs: README and analysis plan | in review |
-| M2 | Scaffolding and dummy data | not started |
+| M1 | Docs: README and analysis plan | done |
+| M2 | Scaffolding and dummy data | in review |
 | M3 | Load, validate, clean, derive | not started |
 | M4 | Descriptives and visualization | not started |
 | M5 | Inferential models | not started |

@@ -1,0 +1,12 @@
+# environments and caches
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.pytest_cache/
+
+# generated analysis outputs
+outputs/
+
+# real participant data stays on the team Google Drive, never in git
+data/raw/*
+!data/raw/.gitkeep

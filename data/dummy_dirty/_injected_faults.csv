@@ -1,0 +1,9 @@
+fault_id,file,where,description,expected_check,severity
+F1,events.csv,P02_T2,duplicate event row,duplicate_rows,soft
+F2,events.csv,P03_T1,t_ms goes backwards after the third event,monotonic_time,hard
+F3,events.csv,P04_T3,unknown node ZZ9,nodes_in_tree,hard
+F4,events.csv,P05_T5,terminal event removed,one_terminal_event,hard
+F5,events.csv,P06_T2,logged on_path flag flipped,on_path_matches_tree,soft
+F6,ratings.csv,P08_T6,rating missing,ratings_complete,soft
+F7,participants.csv,P09,"preference ranks 1,1,3",ranking_permutation,soft
+F8,events.csv,P10,trial P10_T4 missing: only 5 trials,trials_per_participant,soft
