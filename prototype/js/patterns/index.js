@@ -7,21 +7,17 @@
 // import it below, replace the stub and set status to "ready". Then bump appVersion in data/study.json
 // and CACHE_VERSION in sw.js so installed phones pick up the new build.
 
+import deephierarchical from "./deephierarchical.js";
 import megamenu from "./megamenu.js";
-import { makeStub } from "./stub.js";
+import nesteddropdown from "./nesteddropdown.js";
+import { makeStub } from "./stub.js"; // unused now; kept so a future pattern can be registered as "todo"
 
 export const PATTERNS = {
-  // TODO(DH): create js/patterns/deephierarchical.js. Table 2: single-panel drill-down, one level
-  //   visible at a time; tapping an item -> api.select(node); Back control at top -> api.nav("back", parent).
-  //   Then: import it above, set module to it and status to "ready".
-  DH: { status: "todo", module: makeStub("DH") },
+  DH: { status: "ready", module: deephierarchical },
 
   MM: { status: "ready", module: megamenu },
 
-  // TODO(ND): create js/patterns/nesteddropdown.js. Table 2: L1 opens its L2 list beneath it, L2 opens
-  //   its L3 list beneath it (indented); tapping a closed item -> api.select(node); tapping an open
-  //   item collapses it -> api.nav("collapse", parentOfCollapsed). Then: set module and status "ready".
-  ND: { status: "todo", module: makeStub("ND") },
+  ND: { status: "ready", module: nesteddropdown },
 };
 
 export const patternStatus = () => Object.fromEntries(Object.entries(PATTERNS).map(([k, v]) => [k, v.status]));

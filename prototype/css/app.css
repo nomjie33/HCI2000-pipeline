@@ -172,6 +172,26 @@ ul.plain { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
 .mm-links { list-style: none; margin: 0; padding: 0; }
 .mm-link { display: block; width: 100%; text-align: left; padding: 9px 0; min-height: 40px; border: none; background: none; font-size: 15px; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #9ca3af; }
 
+/* ---- deep hierarchical ---- */
+.dh-panel { flex: 1; min-height: 0; overflow-y: auto; background: #fff; }
+.dh-head { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; gap: 4px; min-height: 48px; padding: 0 12px; background: var(--fill); border-bottom: 1px solid var(--line); }
+.dh-back { min-height: 44px; padding: 0 10px 0 4px; border: none; background: none; font-size: 15px; font-weight: 600; color: var(--ink); }
+.dh-title { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dh-list { list-style: none; margin: 0; padding: 0 0 24px; }
+.dh-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-height: 48px; padding: 10px 16px; text-align: left; border: none; border-bottom: 1px solid var(--fill-2); background: none; font-size: 15px; }
+.dh-chev { flex: none; font-size: 20px; color: var(--muted); }
+
+/* ---- nested dropdown ---- */
+.nd-menu { flex: 1; min-height: 0; overflow-y: auto; background: #fff; padding-bottom: 24px; }
+.nd-list { list-style: none; margin: 0; padding: 0; }
+.nd-list.nd-d1, .nd-list.nd-d2 { background: var(--fill); }
+.nd-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-height: 46px; padding: 10px 16px; text-align: left; border: none; border-bottom: 1px solid var(--fill-2); background: none; font-size: 15px; }
+.nd-l1 { font-weight: 600; }
+.nd-l2 { padding-left: 32px; }
+.nd-l3 { padding-left: 48px; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #9ca3af; }
+.nd-item[aria-expanded="true"] { background: var(--fill-2); }
+.nd-caret { flex: none; color: var(--muted); }
+
 /* ---- practice (flat list) ---- */
 .pr-title { font-size: 15px; margin: 14px 16px 4px; color: var(--muted); }
 .pr-list { list-style: none; margin: 0; padding: 0 16px 24px; overflow-y: auto; }
