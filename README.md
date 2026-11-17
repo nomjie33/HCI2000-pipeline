@@ -103,8 +103,8 @@ Built in milestones; each was reviewed before it was committed.
 | M7 | (optional) Phase 1 survey analysis | not started |
 | P1 | Prototype shell: setup, Latin square, practice, logging, SEQ, export, PWA | done |
 | P2 | Prototype: mega-menu (MM) | done |
-| P3 | Prototype: deep hierarchical (DH) | TODO |
-| P4 | Prototype: nested dropdown (ND) | TODO |
+| P3 | Prototype: deep hierarchical (DH) | done |
+| P4 | Prototype: nested dropdown (ND) | done |
 
 Open decisions for the group (details in the plan, section 3): 5 participants per sequence (not 10), block position and task pair
 being the same factor, GEE instead of GLMM, and the censoring of failed trials.

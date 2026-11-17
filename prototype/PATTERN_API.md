@@ -10,10 +10,10 @@ logs identically and the analysis pipeline can compare them.
 | Code | Pattern | File | Status |
 | :-- | :-- | :-- | :-- |
 | MM | Mega-menu | `js/patterns/megamenu.js` | done (reference implementation) |
-| DH | Deep hierarchical | `js/patterns/deephierarchical.js` | **TODO** |
-| ND | Nested dropdown | `js/patterns/nesteddropdown.js` | **TODO** |
+| DH | Deep hierarchical | `js/patterns/deephierarchical.js` | done |
+| ND | Nested dropdown | `js/patterns/nesteddropdown.js` | done |
 
-You can find every open slot with `grep -rn "TODO(DH)\|TODO(ND)" prototype/`.
+Both patterns are built; use `megamenu.js`, `deephierarchical.js` and `nesteddropdown.js` as references for any new one.
 
 ## The contract
 

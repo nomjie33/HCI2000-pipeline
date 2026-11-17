@@ -5,7 +5,7 @@
 // Installed phones fetch the new version the next time the app is opened online; it takes over
 // after the app is closed and reopened. Export data before updating.
 
-const CACHE_VERSION = "nav-study-v1.0.0";
+const CACHE_VERSION = "nav-study-v1.1.0";
 
 const FILES = [
   "./",
@@ -22,8 +22,10 @@ const FILES = [
   "js/store.js",
   "js/tree.js",
   "js/patterns/common.js",
+  "js/patterns/deephierarchical.js",
   "js/patterns/index.js",
   "js/patterns/megamenu.js",
+  "js/patterns/nesteddropdown.js",
   "js/patterns/practice.js",
   "js/patterns/stub.js",
 ];

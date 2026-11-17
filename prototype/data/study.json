@@ -1,6 +1,6 @@
 {
   "_comment": "Study configuration for the prototype. latinSquare, minSelections and timeLimitMs MUST match pipeline/config.py (tests/test_prototype_config.py checks this). Edit task targets and scenario text here; targets must be L3 leaves in data/tree.csv with distinct L2 parents.",
-  "appVersion": "1.0.0",
+  "appVersion": "1.1.0",
   "researcherPin": "2000",
   "timeLimitMs": 180000,
   "patterns": {
