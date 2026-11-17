@@ -1,0 +1,74 @@
+{
+  "_comment": "Study configuration for the prototype. latinSquare, minSelections and timeLimitMs MUST match pipeline/config.py (tests/test_prototype_config.py checks this). Edit task targets and scenario text here; targets must be L3 leaves in data/tree.csv with distinct L2 parents.",
+  "appVersion": "1.0.0",
+  "researcherPin": "2000",
+  "timeLimitMs": 180000,
+  "patterns": {
+    "DH": "Deep hierarchical",
+    "MM": "Mega-menu",
+    "ND": "Nested dropdown"
+  },
+  "minSelections": { "DH": 3, "MM": 2, "ND": 3 },
+  "latinSquare": {
+    "S1": [["DH", "A"], ["MM", "B"], ["ND", "C"]],
+    "S2": [["MM", "A"], ["ND", "B"], ["DH", "C"]],
+    "S3": [["ND", "A"], ["DH", "B"], ["MM", "C"]]
+  },
+  "pairs": {
+    "A": ["T1", "T2"],
+    "B": ["T3", "T4"],
+    "C": ["T5", "T6"]
+  },
+  "tasks": {
+    "T1": {
+      "pair": "A",
+      "target": "C4.1.3",
+      "scenario": "You are planning your first trip abroad and do not have a travel document yet. Find the page that explains how to apply for one."
+    },
+    "T2": {
+      "pair": "A",
+      "target": "C1.1.3",
+      "scenario": "You want to call one of the department's offices. Find the page that lists their contact details."
+    },
+    "T3": {
+      "pair": "B",
+      "target": "C2.2.1",
+      "scenario": "You want to know the steps, fees, and processing times the department commits to for each of its services. Find the page that states them."
+    },
+    "T4": {
+      "pair": "B",
+      "target": "C3.1.5",
+      "scenario": "Every December 30 the country honors its national hero. Find the page about how the department marks that day."
+    },
+    "T5": {
+      "pair": "C",
+      "target": "C2.1.1",
+      "scenario": "You run a supply company. Find the page that shows which contracts the department is currently inviting bids for."
+    },
+    "T6": {
+      "pair": "C",
+      "target": "C5.2.1",
+      "scenario": "You are curious how the country's diplomats are trained. Find the page about the institution that trains them."
+    }
+  },
+  "practice": {
+    "task_id": "PR1",
+    "siteName": "City Public Library",
+    "scenario": "You want to read a book on your phone. Find the page that explains how to borrow an e-book.",
+    "target": "borrow-ebook",
+    "pages": [
+      { "id": "about", "label": "About the Library" },
+      { "id": "hours", "label": "Branch Hours and Locations" },
+      { "id": "borrow-ebook", "label": "Borrowing E-books and Audiobooks" },
+      { "id": "card-new", "label": "Getting a Library Card" },
+      { "id": "card-renew", "label": "Renewing Your Library Card" },
+      { "id": "events", "label": "Events and Storytime" },
+      { "id": "fines", "label": "Fines and Fees" },
+      { "id": "donate", "label": "Donating Books" },
+      { "id": "printing", "label": "Printing and Scanning" },
+      { "id": "rooms", "label": "Study Room Reservations" },
+      { "id": "volunteer", "label": "Volunteering" },
+      { "id": "wifi", "label": "Wi-Fi and Computers" }
+    ]
+  }
+}

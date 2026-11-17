@@ -1,0 +1,16 @@
+{
+  "name": "Navigation Study (HCI2000 Group 6)",
+  "short_name": "Nav Study",
+  "description": "Offline usability-test prototype with automated event logging.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#1f2a37",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
