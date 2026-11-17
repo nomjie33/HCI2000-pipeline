@@ -7,6 +7,18 @@ This repo holds the data-analysis pipeline for the within-subjects usability tes
 `MCO1_Research_Proposal_GROUP6 (1).md`. It takes the CSVs exported after each session and produces cleaned
 trial data, tables, figures, hypothesis decisions (H1–H3) and draft text for the Results and Discussion sections.
 
+## Prototype (Phase 2/3 test app)
+`prototype/` is the offline web app used in the sessions. It covers:
+- researcher setup with the 3×3 Latin square;
+- a fixed practice task;
+- timed tasks with automatic event logging;
+- SEQ ratings;
+- a ZIP export that is already a pipeline dataset folder.
+
+It is installed on the study phone from GitHub Pages. The guide is **[docs/PROTOTYPE_GUIDE.md](docs/PROTOTYPE_GUIDE.md)**,
+and the guide for adding the DH/ND patterns is **[prototype/PATTERN_API.md](prototype/PATTERN_API.md)**.
+To try it on a computer: `python -m http.server 8000 -d prototype`, then open <http://localhost:8000>.
+
 ## What the study measures
 Three navigation patterns (deep hierarchical **DH**, mega-menu **MM**, nested dropdown **ND**), six timed tasks per
 participant, N = 15. Outcomes: item-finding time `T_find`, error count `E`, recovery time `R`
@@ -89,6 +101,10 @@ Built in milestones; each was reviewed before it was committed.
 | M5 | Inferential models | done |
 | M6 | Conclusions and end-to-end run | in review |
 | M7 | (optional) Phase 1 survey analysis | not started |
+| P1 | Prototype shell: setup, Latin square, practice, logging, SEQ, export, PWA | done |
+| P2 | Prototype: mega-menu (MM) | done |
+| P3 | Prototype: deep hierarchical (DH) | TODO |
+| P4 | Prototype: nested dropdown (ND) | TODO |
 
 Open decisions for the group (details in the plan, section 3): 5 participants per sequence (not 10), block position and task pair
 being the same factor, GEE instead of GLMM, and the censoring of failed trials.
