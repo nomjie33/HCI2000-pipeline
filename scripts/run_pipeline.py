@@ -1,7 +1,7 @@
 """Run the whole analysis on one dataset folder.
 
-    python scripts/run_pipeline.py --data-dir data/dummy --out outputs
-    python scripts/run_pipeline.py --data-dir data/raw/session_export --out outputs/real
+    python scripts/run_pipeline.py --data-dir data/raw/session_export --out outputs
+    python scripts/run_pipeline.py --data-dir <dataset folder> --out <output folder>
 
 Exit code 0 = finished; 1 = hard validation failure (the list of problems is printed, nothing is analysed).
 """

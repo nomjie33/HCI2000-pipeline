@@ -53,8 +53,14 @@ def sample_summary(participants: pd.DataFrame) -> pd.DataFrame:
     rows += [("Age, mean (SD)", f"{p.age.mean():.1f} ({p.age.std():.1f})"),
              ("Age, range", f"{int(p.age.min())}-{int(p.age.max())}")]
     rows += [(f"Gender: {g}", int(n)) for g, n in p.groupby("gender").size().items()]
-    rows += [("Familiarity with gov. websites (1-5), mean (SD)", f"{p.gov_familiarity.mean():.2f} ({p.gov_familiarity.std():.2f})"),
-             ("Used the reference website before", int((p.used_reference_site == "Y").sum()))]
+    if p.gov_familiarity.notna().any():
+        rows.append(("Familiarity with gov. websites (1-5), mean (SD)", f"{p.gov_familiarity.mean():.2f} ({p.gov_familiarity.std():.2f})"))
+    if (p.used_reference_site != "").any():
+        rows.append(("Used the reference website before", int((p.used_reference_site == "Y").sum())))
+    if "phone_browse_freq" in p:
+        rows += [(f"Browses on smartphone: {g}", int(n)) for g, n in p.groupby("phone_browse_freq").size().items() if g]
+    if "visited_gov_12mo" in p:
+        rows += [(f"Visited PH gov. website in past 12 months: {g}", int(n)) for g, n in p.groupby("visited_gov_12mo").size().items() if g]
     return pd.DataFrame(rows, columns=["variable", "value"])
 
 

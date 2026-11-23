@@ -327,6 +327,12 @@ def run_sensitivity(trials: pd.DataFrame, analyses: dict[str, OutcomeAnalysis]) 
         base = analyses[key]
         add(key, "primary model", base.primary, base.primary.significant)
         for label, sel, rhs in VARIANTS:
+            missing = [c for c in ("gov_familiarity", "used_reference_site") if c in rhs
+                       and (c not in trials.columns or trials[c].replace("", np.nan).isna().all())]
+            if missing:                                            # covariate was never collected: say so instead of failing
+                rows.append(dict(outcome=key, analysis=label, ok=False, significant=False, agrees_with_primary=np.nan,
+                                 note=f"skipped: {', '.join(missing)} not collected for any participant"))
+                continue
             add(key, label, analyze_primary(base.spec, sel(base.spec.subset(trials)), rhs), base.primary.significant)
     cox = None
     try:

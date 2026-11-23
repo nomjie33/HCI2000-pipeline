@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT))
 import pandas as pd
 pd.set_option("display.width", 200); pd.set_option("display.max_columns", 40)
 
-DATA_DIR = ROOT / "data" / "dummy"      # <- point this at data/raw/<your export folder> for real data
+DATA_DIR = ROOT / "data" / "raw" / "session_export"      # merged real exports (see scripts/build_real_dataset.py)
 OUT_DIR = ROOT / "outputs"
 '''
 
@@ -46,7 +46,7 @@ FIG_NOTES = {
 def notebook_03():
     cells = [
         ("md", "# 03. Descriptives and figures\n\nTables and figures for the Results section, built from the cleaned trial table "
-               "(`pipeline.prepare`). **Dummy data by default; nothing here is a finding until `DATA_DIR` points at real data.**\n\n"
+               "(`pipeline.prepare`).\n\n"
                "Basis: T_find, T_clean, E and R use successful trials only (proposal 4.7); success, failure type and SEQ use all analysed trials."),
         ("code", SETUP + '''
 from IPython.display import Image, display
@@ -78,8 +78,7 @@ print(f"{len(prep.trials)} analysed trials, {prep.trials.participant_id.nunique(
 
 def notebook_04():
     cells = [
-        ("md", "# 04. Inferential models\n\nTests H1 to H3 (and secondary outcomes) following Table 4 of the proposal. "
-               "**Dummy data by default; nothing here is a finding until `DATA_DIR` points at real data.**\n\n"
+        ("md", "# 04. Inferential models\n\nTests H1 to H3 (and secondary outcomes) following Table 4 of the proposal.\n\n"
                "| Outcome | Primary model | Basis |\n| :-- | :-- | :-- |\n"
                "| T_find (H1) | linear mixed model on log time, participant random intercept | successful trials |\n"
                "| E (H2) | Poisson GEE (negative-binomial if overdispersed), clustered on participant | successful trials |\n"
@@ -134,9 +133,8 @@ paths = make_model_figures(suite, OUT_DIR)'''),
 def notebook_01():
     cells = [
         ("md", "# 01. Load, validate and clean\n\nFirst step for every new export. It reads the CSVs, runs every validation check, "
-               "and shows exactly what the cleaning step removes. **Dummy data by default.**\n\n"
-               "Checks are *hard* (the analysis refuses to run: the derived numbers would be untrustworthy) or *soft* (reported and handled explicitly). "
-               "Try `DATA_DIR = ROOT / 'data' / 'dummy_dirty'` below to see the validator catch 8 injected faults."),
+               "and shows exactly what the cleaning step removes.\n\n"
+               "Checks are *hard* (the analysis refuses to run: the derived numbers would be untrustworthy) or *soft* (reported and handled explicitly)."),
         ("code", SETUP + '''
 from pipeline.io import load_dataset
 from pipeline.validate import validate
@@ -164,7 +162,7 @@ ds.events.head(10)'''),
 def notebook_02():
     cells = [
         ("md", "# 02. Derive trial metrics\n\nTurns the event log into one row per trial using the proposal's definitions (3.2-3.3). "
-               "**Dummy data by default.**\n\n"
+               "\n\n"
                "- A *selection* is a tap on a menu item; it is an **error** if the item is not on the correct path P*.\n"
                "- An *error episode* starts at an error and ends when the current node is back on P* (an on-path tap, or a Back/collapse landing on-path); "
                "if the trial ends first, it ends at the trial end.\n"
@@ -191,15 +189,6 @@ trials.head()'''),
                  "ev"),
         ("code", "print(trials.loc[trials.trial_id == TRIAL_ID, ['trial_id', 'pattern', 'E', 'R', 'T_find', 'T_clean', 'selection_path']].to_string(index=False))\n"
                  "episodes[episodes.trial_id == TRIAL_ID]"),
-        ("md", "## Check against the generator's ground truth (dummy data only)\nThe dummy generator records the true E, R and T_find for each trial; the pipeline must reproduce them exactly."),
-        ("code", "gt_path = DATA_DIR / '_ground_truth_trials.csv'\n"
-                 "if gt_path.exists():\n"
-                 "    gt = pd.read_csv(gt_path)\n"
-                 "    m = trials.merge(gt, on='trial_id', suffixes=('', '_true'))\n"
-                 "    print('trials compared:', len(m))\n"
-                 "    print('E equal:', bool((m.E == m.E_true).all()), '| R equal:', bool(np.allclose(m.R, m.R_true)), '| T_find equal:', bool(np.allclose(m.T_find, m.T_find_true)))\n"
-                 "else:\n"
-                 "    print('No ground-truth file (expected for real data).')"),
     ]
     return nb(cells)
 
@@ -207,7 +196,7 @@ trials.head()'''),
 def notebook_05():
     cells = [
         ("md", "# 05. Conclusions and draft Results text\n\nRuns the whole pipeline in one call and applies the pre-set decision rules "
-               "(`pipeline/conclude.py`, plan step 7). **Dummy data by default: none of this may be cited until `DATA_DIR` points at real data.**\n\n"
+               "(`pipeline/conclude.py`, plan step 7).\n\n"
                "Rules: H1 to H3 are the *null* hypotheses (proposal 4.1). A null is rejected only when the omnibus test of the decision source "
                "(the primary model, or the Friedman fallback when the primary is flagged) has p < .05; otherwise we *fail to reject* (never 'no difference'). "
                "Pairwise contrasts are reported only after a significant omnibus test and only if they survive Holm correction."),

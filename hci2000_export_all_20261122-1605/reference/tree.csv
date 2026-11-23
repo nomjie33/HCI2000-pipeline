@@ -1,0 +1,65 @@
+node_id,parent_id,level,label
+ROOT,,0,Home
+C1,ROOT,1,About Us
+C1.1,C1,2,DFA Compendium
+C1.1.1,C1.1,3,Historical Background
+C1.1.2,C1.1,3,Organizational Structure
+C1.1.3,C1.1,3,Directory
+C1.1.4,C1.1,3,Former SFAs
+C2,ROOT,1,Transparency
+C2.1,C2,2,Procurement
+C2.1.1,C2.1,3,Procurement Opportunities
+C2.1.2,C2.1,3,Contracts Awarded
+C2.1.3,C2.1,3,Procurement Planning
+C2.1.4,C2.1,3,Procurement Monitoring Report (PMR)
+C2.1.5,C2.1,3,Other Relevant Information
+C2.2,C2,2,Quality & Compliance
+C2.2.1,C2.2,3,DFA Citizen's Charter
+C2.2.2,C2.2,3,DFA Quality Policy
+C2.2.3,C2.2,3,ISO 9001:2015 Certificate
+C2.2.4,C2.2,3,Accomplishment Reports
+C2.2.5,C2.2,3,Privacy Notice
+C2.2.6,C2.2,3,Privacy Policy
+C2.2.7,C2.2,3,NPC Registration
+C2.3,C2,2,Gender & Development
+C2.3.1,C2.3,3,Announcement
+C2.3.2,C2.3,3,Featured News
+C2.3.3,C2.3,3,Focal Point System
+C2.3.4,C2.3,3,Plan and Budget
+C2.3.5,C2.3,3,Accomplishments
+C2.3.6,C2.3,3,Agenda
+C2.3.7,C2.3,3,Learning Resources
+C3,ROOT,1,News
+C3.1,C3,2,Events
+C3.1.1,C3.1,3,A Decade Hence
+C3.1.2,C3.1,3,Araw ng Kagitingan
+C3.1.3,C3.1,3,ASEAN
+C3.1.4,C3.1,3,Kalayaan
+C3.1.5,C3.1,3,Rizal Day
+C3.1.6,C3.1,3,Year-End Holiday
+C3.1.7,C3.1,3,MANA Mo
+C4,ROOT,1,Services
+C4.1,C4,2,Consular
+C4.1.1,C4.1,3,Authentication
+C4.1.2,C4.1,3,Civil Registration
+C4.1.3,C4.1,3,Passport
+C4.1.4,C4.1,3,Visa
+C5,ROOT,1,Resources
+C5.1,C5,2,Overseas Filipinos
+C5.1.1,C5.1,3,Distribution
+C5.1.2,C5.1,3,Stock Estimates
+C5.2,C5,2,Attached and Partner Agencies
+C5.2.1,C5.2,3,Foreign Service Institute
+C5.2.2,C5.2,3,Technical Cooperation Council of the Philippines
+C5.2.3,C5.2,3,Public Financial Management
+C5.2.4,C5.2,3,PPP Center
+C5.2.5,C5.2,3,Philippine Government Portal
+C5.2.6,C5.2,3,PHL Government Agencies
+C6,ROOT,1,Careers
+C6.1,C6,2,Board of Foreign Service Examinations (BFSE)
+C6.1.1,C6.1,3,Updates & Announcements
+C6.1.2,C6.1,3,FAQs
+C6.1.3,C6.1,3,About
+C7,ROOT,1,More in DFA Releases
+C7.1,C7,2,DFA Releases
+C7.2,C7.1,3,Posts

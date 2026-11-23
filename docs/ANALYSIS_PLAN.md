@@ -60,7 +60,7 @@ actions: logged, not selections. Every trial has one `start` and exactly one ter
 **`reference/tree.csv`**: `node_id, parent_id, level (1–3), label`. **`reference/tasks.csv`**: `task_id, task_pair, target_node`.
 The tree lets the pipeline recompute `on_path` independently instead of trusting the logged flag.
 
-Each dataset lives in one folder (`data/dummy/`, `data/raw/`, …) holding the four CSVs above plus a `reference/` subfolder
+Each dataset lives in one folder (e.g. `data/raw/session_export/`) holding the four CSVs above plus a `reference/` subfolder
 with `tree.csv` and `tasks.csv`. The practice tree (`PR*` nodes, a public-library topic) is included in `tree.csv`.
 A `target_reached` row is logged at the same `t_ms` as the `select` of the target.
 
@@ -192,7 +192,7 @@ Rules are fixed in advance so conclusions do not depend on how the results look:
 One command produces all of it (`python scripts/run_pipeline.py --data-dir <folder> --out outputs`), including
 `outputs/tables/hypothesis_decisions.csv`, `limitations_checklist.csv`, `mechanism_decomposition.csv` and `outputs/results_draft.md`
 (templated sentences plus tables and figure references) as starting text for the Results and Discussion sections.
-Dummy-data runs carry a "SYNTHETIC DATA" banner. The group edits and owns the interpretation.
+The group edits and owns the interpretation.
 
 ## 3. Gaps and deviations from the proposal (decisions needed)
 
@@ -211,5 +211,5 @@ Dummy-data runs carry a "SYNTHETIC DATA" banner. The group edits and owns the in
 
 ## 4. Reproducibility
 - All thresholds (180 s limit, α = .05, dispersion cutoff) live in `pipeline/config.py`.
-- Random seeds are fixed in the dummy-data generator only; the analysis itself is deterministic.
-- Dummy data lives in `data/dummy/` and is synthetic. Real exports go in `data/raw/` (git-ignored: participant data stays on Google Drive).
+- The analysis is deterministic (no random seeds).
+- Real exports go in `data/raw/` (git-ignored: participant data stays on Google Drive).

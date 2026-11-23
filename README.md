@@ -42,30 +42,20 @@ in the proposal: **[docs/ANALYSIS_PLAN.md](docs/ANALYSIS_PLAN.md)**.
 | `exclusions.csv` | trials removed for device/app faults |
 | `reference/tree.csv`, `reference/tasks.csv` | content tree and task targets |
 
-## Dummy data
-`python scripts/make_dummy_data.py` writes clean synthetic data to `data/dummy/` (15 participants, 105 trials incl.
-practice, a few give-ups/timeouts, one excluded trial). `--dirty` writes `data/dummy_dirty/` with 8 known faults listed in
-`_injected_faults.csv`, used to test the validator. `_ground_truth_trials.csv` holds the generator's true E, R, T_find
-for checking the pipeline. The dummy tree uses placeholder labels; replace `reference/tree.csv` once Phase 2 fixes the real tree.
-
 ## Quickstart
 ```bash
 python -m venv .venv
 .venv\Scripts\activate                                    # Windows; on macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
-python scripts/make_dummy_data.py                         # synthetic data -> data/dummy/ (already committed)
-python scripts/run_pipeline.py --data-dir data/dummy --out outputs
+python scripts/build_real_dataset.py --exports <export folder 1> <export folder 2> --form "<Google Form responses>.csv" --out data/raw/session_export
+python scripts/run_pipeline.py --data-dir data/raw/session_export --out outputs
 ```
-That one command validates, cleans, derives, describes, plots, fits the models and writes the conclusions. It prints the H1 to H3
-decisions and exits with code 1 (analysing nothing) if the data has hard problems. Run the tests with `pytest -q` (43 tests, under a minute).
+`build_real_dataset.py` merges exports from several phones (participant IDs that repeat across exports are renumbered, mapping in
+`id_mapping.csv`) and fills `participants.csv` from the Google Form by matching each response to the session that finished just before it
+(`form_match.csv`). The pipeline then validates, cleans, derives, describes, plots, fits the models and writes the conclusions. It prints the H1 to H3
+decisions and exits with code 1 (analysing nothing) if the data has hard problems. Run the tests with `pytest -q` (hand-built unit tests only).
 
-## Using your real data
-1. Put the exports in a new folder, e.g. `data/raw/session_export/`, with the same files as `data/dummy/`
-   (`events.csv`, `ratings.csv`, `participants.csv`, `exclusions.csv`, `reference/tree.csv`, `reference/tasks.csv`; columns in the data dictionary).
-   `data/raw/` is git-ignored: real participant data stays on the team Google Drive.
-2. `python scripts/run_pipeline.py --data-dir data/raw/session_export --out outputs/real`
-3. Open the notebooks (set `DATA_DIR` in the first cell) to see each step narrated.
-4. Read `outputs/results_draft.md` and `outputs/tables/limitations_checklist.csv`; the draft is a starting point, not the final text.
+Note: the form did not collect `gov_familiarity` or `used_reference_site`, so those stay blank and the covariate sensitivity model is reported as skipped.
 
 ## Notebooks (`notebooks/`, saved without outputs: open and Run All)
 | Notebook | What it shows |
@@ -95,7 +85,7 @@ Built in milestones; each was reviewed before it was committed.
 | # | Milestone | Status |
 | :-- | :-- | :-- |
 | M1 | Docs: README and analysis plan | done |
-| M2 | Scaffolding and dummy data | done |
+| M2 | Scaffolding | done |
 | M3 | Load, validate, clean, derive | done |
 | M4 | Descriptives and visualization | done |
 | M5 | Inferential models | done |
@@ -111,4 +101,3 @@ being the same factor, GEE instead of GLMM, and the censoring of failed trials.
 
 ## Data privacy
 Participants are identified by ID only. Real data is git-ignored and kept on the team Google Drive.
-Everything in `data/dummy/` is synthetic and must never be cited as a result.

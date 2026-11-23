@@ -1,6 +1,6 @@
 """Steps 1-3 in one call: validate -> clean -> derive. Also runnable from the command line:
 
-    python -m pipeline.prepare --data-dir data/dummy --out outputs
+    python -m pipeline.prepare --data-dir data/raw/session_export --out outputs
 """
 from __future__ import annotations
 
