@@ -21,9 +21,9 @@ LATIN_SQUARE = {
     "S3": [("ND", "A"), ("DH", "B"), ("MM", "C")],
 }
 
-# expected sample (soft checks): 15 participants, 5 per sequence, 6 experimental trials each
-N_PARTICIPANTS = 15
-PER_SEQUENCE = 5
+# expected sample (soft checks): 18 participants, 6 per sequence, 6 experimental trials each
+N_PARTICIPANTS = 18
+PER_SEQUENCE = 6
 EXPERIMENTAL_TRIALS = 6
 
 SEQ_RANGE = (1, 7)

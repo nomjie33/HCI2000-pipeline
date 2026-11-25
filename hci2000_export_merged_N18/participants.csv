@@ -1,0 +1,19 @@
+participant_id,sequence,age,gender,gov_familiarity,used_reference_site,rank_DH,rank_MM,rank_ND,comments,phone_browse_freq,visited_gov_12mo
+P01,S1,33,F,,,1,2,3,,Daily,Yes
+P02,S2,30,F,,,3,2,1,,Daily,Yes
+P03,S3,30,F,,,1,2,3,,Daily,Yes
+P04,S1,37,F,,,2,3,1,,Daily,Yes
+P05,S2,21,M,,,2,1,3,,Daily,Yes
+P06,S3,20,F,,,2,3,1,,Daily,Yes
+P07,S1,20,F,,,1,3,2,,Daily,Yes
+P08,S2,21,F,,,1,2,3,,Daily,Yes
+P09,S3,44,F,,,2,3,1,,Several times a week,Yes
+P10,S1,24,F,,,1,2,3,,Daily,Yes
+P11,S1,21,F,,,2,3,1,,Daily,Yes
+P12,S2,20,M,,,2,3,1,,Daily,Yes
+P13,S3,23,F,,,3,1,2,,Several times a week,Yes
+P14,S1,24,M,,,2,1,3,,Several times a week,Yes
+P15,S2,22,F,,,3,1,2,,Daily,Yes
+P16,S2,,,,,,,,,,
+P17,S3,,,,,,,,,,
+P18,S3,,,,,,,,,,

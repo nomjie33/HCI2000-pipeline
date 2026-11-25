@@ -1,8 +1,0 @@
-participant_id,sequence,pair_order,started_at,finished_at,completed_trials,skipped_blocks,test_session,app_version,pattern_status,exported_at
-P02,S3,standard,2026-11-21T02:41:07.663Z,2026-11-21T02:49:14.408Z,6,,0,1.1.0,DH=ready MM=ready ND=ready,2026-11-22T08:05:48.398Z
-P03,S1,reversed,2026-11-21T09:40:20.769Z,2026-11-21T10:03:54.982Z,6,,0,1.1.0,DH=ready MM=ready ND=ready,2026-11-22T08:05:48.398Z
-P04,S1,standard,2026-11-21T10:30:50.250Z,2026-11-21T10:40:29.400Z,6,,0,1.1.0,DH=ready MM=ready ND=ready,2026-11-22T08:05:48.399Z
-P05,S2,standard,2026-11-22T07:04:46.027Z,2026-11-22T07:10:02.101Z,6,,0,1.1.0,DH=ready MM=ready ND=ready,2026-11-22T08:05:48.399Z
-P06,S3,reversed,2026-11-22T07:19:37.555Z,2026-11-22T07:28:45.331Z,6,,0,1.1.0,DH=ready MM=ready ND=ready,2026-11-22T08:05:48.399Z
-P07,S1,standard,2026-11-22T07:47:50.947Z,2026-11-22T07:55:46.103Z,6,,0,1.1.0,DH=ready MM=ready ND=ready,2026-11-22T08:05:48.399Z
-P08,S2,reversed,2026-11-22T07:57:30.578Z,2026-11-22T08:03:24.769Z,6,,0,1.1.0,DH=ready MM=ready ND=ready,2026-11-22T08:05:48.399Z

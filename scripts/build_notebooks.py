@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT))
 import pandas as pd
 pd.set_option("display.width", 200); pd.set_option("display.max_columns", 40)
 
-DATA_DIR = ROOT / "data" / "raw" / "session_export"      # merged real exports (see scripts/build_real_dataset.py)
+DATA_DIR = ROOT / "hci2000_export_merged_N18"      # all 18 participants merged (see scripts/build_real_dataset.py)
 OUT_DIR = ROOT / "outputs"
 '''
 
@@ -25,7 +25,7 @@ def nb(cells):
     n.cells = [nbf.v4.new_markdown_cell(c) if k == "md" else nbf.v4.new_code_cell(c) for k, c in cells]
     for i, cell in enumerate(n.cells):
         cell["id"] = f"cell{i:03d}"          # deterministic ids so rebuilds don't create noisy diffs
-    n.metadata["kernelspec"] = {"display_name": "Python 3", "language": "python", "name": "python3"}
+    n.metadata["kernelspec"] = {"display_name": "HCI2000 (.venv)", "language": "python", "name": "hci2000"}   # see README: register the venv kernel
     return n
 
 
@@ -121,7 +121,7 @@ paths = make_model_figures(suite, OUT_DIR)'''),
                "Strong departures trigger the fallback."),
         ("code", "display(Image(filename=str(paths['F11_model_diagnostics'])))"),
         ("md", "## Reading these results honestly\n"
-               "- With N = 15 (30 trials per pattern) power is limited: \"not significant\" means *not detected*, not *no difference*.\n"
+               "- With N = 18 (36 trials per pattern) power is limited: \"not significant\" means *not detected*, not *no difference*.\n"
                "- GEE effects are population-averaged, not participant-specific (a deviation from Table 4's mixed models).\n"
                "- Block position and task pair are aliased, so a block effect may be learning or task difficulty.\n"
                "- Failures are excluded from the time and error models; check the sensitivity table and the success rates.\n"

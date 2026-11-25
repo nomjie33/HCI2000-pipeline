@@ -3,7 +3,7 @@
 Rules (fixed in advance, docs/ANALYSIS_PLAN.md step 7):
  1. H0 is rejected when the omnibus test of the DECISION SOURCE has p < .05. The decision source is the primary
     model unless the fallback rule switched it to the Friedman test (models.py). Otherwise we "fail to reject":
-    never "no difference", because N = 15 may lack power.
+    never "no difference", because N = 18 may lack power.
  2. Pairwise contrasts are reported only when the omnibus test is significant, and only those that survive Holm correction.
  3. Mechanism (RQ3): the difference in mean T_find between two patterns is split exactly into a recovery part (R) and a
     clean-navigation part (T_clean), because T_find = T_clean + R. The gap is "mainly recovery" if the T_clean model is not

@@ -85,7 +85,7 @@ stops on hard failures, warns on soft ones):
 | `t_ms` non-decreasing within a trial; terminal event ≤ 180 000 ms (timeout = 180 000) | hard |
 | Every `node_id` / `current_node_after` / `target_node` exists in `tree.csv` | hard |
 | Trial targets match `tasks.csv`; `min_selections` consistent with pattern | hard |
-| 6 experimental trials per participant; 5 participants per sequence (N = 15) | soft (expected counts shown) |
+| 6 experimental trials per participant; 6 participants per sequence (N = 18) | soft (expected counts shown) |
 | Pattern/pair per sequence and block match the Latin square in Table 3 | soft |
 | Logged `on_path` equals tree-derived on-path flag | soft (mismatch table; the tree-derived value is used) |
 | No duplicate `(trial_id, t_ms, event_type, node_id)` rows | soft |
@@ -177,7 +177,7 @@ Rules are fixed in advance so conclusions do not depend on how the results look:
 
 1. **Per hypothesis (H1–H3, which are the *null* hypotheses, §4.1):** reject the null if the omnibus test of the *decision source* has p < .05.
    The decision source is the primary model, or the Friedman fallback when the primary model is flagged (step 6). Otherwise "fail to reject"
-   (never "no difference"; with N = 15 we may lack power). If a flag has no usable fallback, the primary result is kept with a caution.
+   (never "no difference"; with N = 18 we may lack power). If a flag has no usable fallback, the primary result is kept with a caution.
 2. **Direction and size:** pairwise contrasts are reported only after a significant omnibus test, and only those that survive Holm correction,
    with effect size and 95% CI (no CI for the Friedman fallback).
 3. **Mechanism (RQ3):** because T_find = T_clean + R, the gap in mean T_find between two patterns splits exactly into a recovery part and a

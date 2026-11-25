@@ -144,16 +144,31 @@ def main(argv: list[str] | None = None) -> None:
             sessions.append(dict(participant_id=m[s["participant_id"]], sequence=s["sequence"], finished_local=(fin + PH).replace(tzinfo=None)))
     sessions.sort(key=lambda s: s["finished_local"])
     form = sorted(parse_form(a.form), key=lambda f: f["ts"])
-    if len(form) != len(sessions):
-        raise SystemExit(f"{len(form)} form responses but {len(sessions)} sessions: cannot match one-to-one")
+    if len(form) > len(sessions):
+        raise SystemExit(f"{len(form)} form responses but only {len(sessions)} sessions: cannot match")
+
+    # each response -> the latest not-yet-matched session that ended 0-30 min before it
+    by_pid: dict[str, dict] = {}
+    for f in form:
+        cands = [s for s in sessions if s["participant_id"] not in by_pid
+                 and 0 <= (f["ts"] - s["finished_local"]).total_seconds() / 60 <= 30]
+        if not cands:
+            raise SystemExit(f"form response at {f['ts']} has no session ending in the 30 min before it")
+        by_pid[max(cands, key=lambda s: s["finished_local"])["participant_id"]] = f
 
     match, prows = [], []
-    for s, f in zip(sessions, form):
+    for s in sessions:
+        f = by_pid.get(s["participant_id"])
+        if f is None:
+            print(f"  warning: {s['participant_id']} (session ended {s['finished_local']:%Y-%m-%d %H:%M}) has no form response; "
+                  "demographics and preference ranks left blank")
+            match.append(dict(participant_id=s["participant_id"], session_finished_local=s["finished_local"].isoformat(sep=" "),
+                              form_timestamp="", minutes_between=""))
+            prows.append(dict(participant_id=s["participant_id"], sequence=s["sequence"]))
+            continue
         gap = (f["ts"] - s["finished_local"]).total_seconds() / 60
         match.append(dict(participant_id=s["participant_id"], session_finished_local=s["finished_local"].isoformat(sep=" "),
                           form_timestamp=f["ts"].isoformat(sep=" "), minutes_between=round(gap, 1)))
-        if not 0 <= gap <= 30:
-            raise SystemExit(f"{s['participant_id']}: form response is {gap:.1f} min after the session ended; match looks wrong")
         if f["consent"].lower() != "yes":
             raise SystemExit(f"{s['participant_id']}: consent is {f['consent']!r}")
         ranks = sorted(int(f[f"rank_{p}"]) for p in ("DH", "MM", "ND"))
@@ -174,7 +189,8 @@ def main(argv: list[str] | None = None) -> None:
     for name, text in refs.items():
         (a.out / "reference").mkdir(parents=True, exist_ok=True)
         (a.out / "reference" / name).write_text(text, encoding="utf-8", newline="")
-    print(f"participants.csv        {len(prows)} rows (max form lag {max(m['minutes_between'] for m in match)} min)")
+    lags = [m["minutes_between"] for m in match if m["minutes_between"] != ""]
+    print(f"participants.csv        {len(prows)} rows, {len(lags)} matched to the form (max form lag {max(lags, default=0)} min)")
     print(f"wrote {a.out}")
 
 
