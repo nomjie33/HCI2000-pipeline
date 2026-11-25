@@ -7,17 +7,18 @@ This repo holds the data-analysis pipeline for the within-subjects usability tes
 `MCO1_Research_Proposal_GROUP6 (1).md`. It takes the CSVs exported after each session and produces cleaned
 trial data, tables, figures, hypothesis decisions (H1–H3) and draft text for the Results and Discussion sections.
 
-##One-time setup:
+## One-time setup:
 `python -m venv .venv`
 `.venv\Scripts\activate`
 `pip install -r requirements.txt`
 `python -m ipykernel install --user --name hci2000 --display-name "HCI2000 (.venv)"`
 
-Run the whole analysis (validate, clean, derive, describe, plots, models, conclusions):
+## Run the whole analysis (validate, clean, derive, describe, plots, models, conclusions):
 `python scripts/run_pipeline.py --data-dir hci2000_export_merged_N18 --out outputs`
 This writes all tables, figures F1–F12 and outputs/results_draft.md. It prints the H1–H3 decisions.
 
-Run the notebooks in VS Code: open one, pick the HCI2000 (.venv) kernel, then Run All. To run all five from the terminal and save the results with outputs:
+## Run the notebooks in VS Code: open one, pick the HCI2000 (.venv) kernel, then Run All. 
+To run all five from the terminal and save the results with outputs:
 `jupyter nbconvert --to notebook --execute --inplace notebooks/*.ipynb`
 
 ## Prototype (Phase 2/3 test app)
